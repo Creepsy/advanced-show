@@ -18,9 +18,9 @@ instance AdvancedShow a => AdvancedShow (Tree a)
 
 main :: IO ()
 main = do
-    let test = Node 10 (Node 11 Leaf Leaf) (Node 12 (Node 13 Leaf Leaf) Leaf) :: Tree Int
-        namedTest = NamedNode 10 (NamedNode 11 NamedLeaf NamedLeaf) (NamedNode 12 (NamedNode 13 NamedLeaf NamedLeaf) NamedLeaf) :: NamedTree Int
-
+    let test = Node [10, 22] (Node [12, 2] Leaf Leaf) (Node [2] (Node [1, 2, 3, 4] Leaf Leaf) Leaf) :: Tree [Int]
+        namedTest = NamedNode "12" (NamedNode "test" NamedLeaf NamedLeaf) (NamedNode "tasty" (NamedNode "ye" NamedLeaf NamedLeaf) NamedLeaf) :: NamedTree String
+    
     putStrLn "Normal Tree:"
     putStrLn "Show:"
     print test

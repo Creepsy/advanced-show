@@ -14,14 +14,46 @@ module AdvancedShow (
 import qualified GHC.Generics as Gen
 import GHC.Generics ((:+:), (:*:)(..))
 import qualified Data.Data as Gen
+import Data.List (intersperse, intercalate)
 
 class AdvancedShow a where
     advShow :: a -> String
     default advShow :: (Gen.Generic a, AdvancedShow' (Gen.Rep a)) => a -> String
     advShow val = unlines . advShow' $ Gen.from val
+    
+    advListShow :: [a] -> String
+    default advListShow :: [a] -> String
+    advListShow elements = "[\n"  ++ elementsDisplay' ++ "\n]" where
+        elementsDisplay = map advShow elements
+        elementsDisplay' = intercalate ",\n" . map ("  " ++) $ elementsDisplay
+
+-- AdvancedShow instances for native types
+instance AdvancedShow Bool where
+    advShow = show
 
 instance AdvancedShow Int where
     advShow = show
+
+instance AdvancedShow Integer where
+    advShow = show
+
+instance AdvancedShow Float where
+    advShow = show
+
+instance AdvancedShow Double where
+    advShow = show
+
+instance AdvancedShow () where
+    advShow = show
+
+instance AdvancedShow Char where
+    advShow = show
+    advListShow = show
+
+instance (AdvancedShow a) => AdvancedShow [a] where
+    advShow = advListShow
+
+
 
 class AdvancedShow' (f :: * -> *) where
     advShow' :: f a -> [String]
