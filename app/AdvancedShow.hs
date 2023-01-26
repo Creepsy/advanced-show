@@ -84,7 +84,7 @@ instance (Gen.Datatype k, AdvancedShow' c) => AdvancedShow' (Gen.D1 k c) where
     advShow' typ@(Gen.M1 val) = advShow' val 
 
 instance (Gen.Selector k, AdvancedShow' c) => AdvancedShow' (Gen.S1 k c) where
-    advShow' field@(Gen.M1 val) = linesValue' where
+    advShow' field@(Gen.M1 val) = if null . Gen.selName $ field then advShow' val else linesValue' where
         linesValue = advShow' val
         linesValue' = taggedHead : tail linesValue
 
