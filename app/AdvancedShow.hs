@@ -8,7 +8,8 @@
 -- https://hackage.haskell.org/package/base-4.17.0.0/docs/GHC-Generics.html#g:3
 
 module AdvancedShow (
-    AdvancedShow(..)
+    AdvancedShow(..),
+    advPrint
 ) where
 
 import qualified GHC.Generics as Gen
@@ -16,6 +17,8 @@ import GHC.Generics ((:+:), (:*:)(..))
 import qualified Data.Data as Gen
 import Data.List (intersperse, intercalate)
 
+advPrint :: AdvancedShow a => a -> IO ()
+advPrint = putStrLn . advShow
 class AdvancedShow a where
     advShow :: a -> String
     default advShow :: (Gen.Generic a, AdvancedShow' (Gen.Rep a)) => a -> String

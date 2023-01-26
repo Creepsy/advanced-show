@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 module Main where
 import GHC.Generics (Generic)
-import AdvancedShow (AdvancedShow (advShow))
+import AdvancedShow (AdvancedShow (advShow), advPrint)
 
 data Tree a = Leaf | Node a (Tree a) (Tree a) deriving (Generic, Show)
 data NamedTree a = 
@@ -32,17 +32,17 @@ main = do
     putStrLn "Show:"
     print test
     putStrLn "Advanced Show:"
-    putStrLn . advShow $ test
+    advPrint test
 
     putStrLn ""
 
     putStrLn "Named Tree:"
     putStrLn "Show:"
-    print namedTest
+    advPrint namedTest
     putStrLn "Advanced Show:"
-    putStrLn . advShow $ namedTest
+    advPrint namedTest
 
     let treeee = BigTree {treeType = [BigTree {treeType = 1, height = 1}, BigTree {treeType = 2, height = 1}], height = 1} :: BigTree [BigTree Int]
     -- let treeee = [BigTree {treeType = 1, height = 1}, BigTree {treeType = 2, height = 1}] :: [BigTree Int]
 
-    putStrLn . advShow $ treeee
+    advPrint treeee
