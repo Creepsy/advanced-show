@@ -16,6 +16,13 @@ data NamedTree a =
 instance AdvancedShow a => AdvancedShow (NamedTree a)
 instance AdvancedShow a => AdvancedShow (Tree a)
 
+data BigTree a = BigTree {
+    treeType :: a,
+    height :: Int
+} deriving (Generic)
+
+instance AdvancedShow a => AdvancedShow (BigTree a)
+
 main :: IO ()
 main = do
     let test = Node [10, 22] (Node [12, 2] Leaf Leaf) (Node [2] (Node [1, 2, 3, 4] Leaf Leaf) Leaf) :: Tree [Int]
@@ -34,3 +41,8 @@ main = do
     print namedTest
     putStrLn "Advanced Show:"
     putStrLn . advShow $ namedTest
+
+    let treeee = BigTree {treeType = [BigTree {treeType = 1, height = 1}, BigTree {treeType = 2, height = 1}], height = 1} :: BigTree [BigTree Int]
+    -- let treeee = [BigTree {treeType = 1, height = 1}, BigTree {treeType = 2, height = 1}] :: [BigTree Int]
+
+    putStrLn . advShow $ treeee

@@ -19,13 +19,13 @@ import Data.List (intersperse, intercalate)
 class AdvancedShow a where
     advShow :: a -> String
     default advShow :: (Gen.Generic a, AdvancedShow' (Gen.Rep a)) => a -> String
-    advShow val = unlines . advShow' $ Gen.from val
+    advShow val = init . unlines . advShow' $ Gen.from val
     
     advListShow :: [a] -> String
     default advListShow :: [a] -> String
     advListShow elements = "[\n"  ++ elementsDisplay' ++ "\n]" where
-        elementsDisplay = map advShow elements
-        elementsDisplay' = intercalate ",\n" . map ("  " ++) $ elementsDisplay
+        elementsDisplay = map (init . unlines . map ("  " ++) . lines . advShow) elements
+        elementsDisplay' = intercalate ",\n" elementsDisplay
 
 -- AdvancedShow instances for native types
 instance AdvancedShow Bool where
@@ -74,7 +74,7 @@ instance (AdvancedShow' a, AdvancedShow' b) => AdvancedShow' (a :*: b) where
         linesFirst' = head linesFirst : (map (\(_:line') -> '|' : line') . tail $ linesFirst)
 
 instance (AdvancedShow c) => AdvancedShow' (Gen.K1 i c) where
-    advShow' (Gen.K1 val) = let (head:rest) = lines $ advShow val in ("└─ " ++ head) : map ("   " ++) rest
+    advShow' (Gen.K1 val) = let (head:rest) = lines . advShow $ val in ("└─ " ++ head) : map ("   " ++) rest
 
 instance (Gen.Constructor k, AdvancedShow' c) => AdvancedShow' (Gen.C1 k c) where
     advShow' :: (Gen.Constructor k, AdvancedShow' c) => Gen.C1 k c a -> [String]
