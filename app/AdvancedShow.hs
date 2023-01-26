@@ -52,4 +52,9 @@ instance (Gen.Datatype k, AdvancedShow' c) => AdvancedShow' (Gen.D1 k c) where
     advShow' typ@(Gen.M1 val) = advShow' val 
 
 instance (Gen.Selector k, AdvancedShow' c) => AdvancedShow' (Gen.S1 k c) where
-    advShow' con@(Gen.M1 val) = advShow' val
+    advShow' field@(Gen.M1 val) = linesValue' where
+        linesValue = advShow' val
+        linesValue' = taggedHead : tail linesValue
+
+        fieldTag = Gen.selName field ++ ":" 
+        taggedHead = let (prefix : typeDescription) = words . head $ linesValue in unwords $ prefix : fieldTag : typeDescription
